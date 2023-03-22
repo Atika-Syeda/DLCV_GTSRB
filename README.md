@@ -19,8 +19,7 @@ German Traffic Sign Recognition Benchmark Project as part of Deep Learning for C
 
 ### Download dataset
 
-Please download the German Traffic Sign Recognition Benchmark (GTSRB) dataset from [here](https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e19370/publis
-hed-archive.html) and extract the files in the same directory as the code.
+Please download the German Traffic Sign Recognition Benchmark (GTSRB) dataset from [here](https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e19370/published-archive.html) and extract the files in the same directory as the code.
 - Training images and annotations are in “GTSRB_Final_Training_Images.zip”
 - Test images are in “GTSRB_Final_Test_Images.zip” and test annotations are in “GTSRB_Final_Test_GT.zip”
 
