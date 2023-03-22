@@ -1,19 +1,34 @@
 # DLCV_GTSRB
 German Traffic Sign Recognition Benchmark Project as part of Deep Learning for Computer Vision class
 
-## Project Structure
-
-```
-├── README.md
-├── main.py
-├── model.py
-├── utils.py
-├── evaluate.py
-
-```
-
 ## Summary 
 
+
+## Project setup
+
+Use the following to clone the package:
+```
+git clone https://github.com/Atika-Syeda/DLCV_GTSRB.git
+```
+After cloning or pulling the project, the project structure will be as follows:
+
+```
+├── environment.yml
+├── evaluate.py
+├── main.py
+├── model.py
+├── README.md
+├── utils.py
+```
+
+Next, install anaconda and create the virtual environment as follows:
+```
+conda env create -f environment.yml
+```
+To activate the environment for running the package use:
+```
+conda activate GTSRB
+```
 
 ## Usage
 
@@ -22,6 +37,21 @@ German Traffic Sign Recognition Benchmark Project as part of Deep Learning for C
 Please download the German Traffic Sign Recognition Benchmark (GTSRB) dataset from [here](https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e19370/published-archive.html) and extract the files in the same directory as the code.
 - Training images and annotations are in “GTSRB_Final_Training_Images.zip”
 - Test images are in “GTSRB_Final_Test_Images.zip” and test annotations are in “GTSRB_Final_Test_GT.zip”
+After downloading and extracting the dataset the project structure should look as follows:
+```
+├── GTSRB
+    ├── Final_Test
+    ├── Final_Training
+    ├── GT-final_test.csv
+    ├── Readme-Images-Final-Test.txt
+    ├── Readme-Images.txt
+├── environment.yml
+├── evaluate.py
+├── main.py
+├── model.py
+├── README.md
+├── utils.py
+```
 
 ### Training
 

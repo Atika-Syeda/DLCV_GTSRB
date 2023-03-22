@@ -49,10 +49,8 @@ if not os.path.exists(model_file):
 if args.verbose:
     print(f"Using model: {model_file}")
 
-train_data_path = os.path.join(os.getcwd(), 'GTSRB_Final_Training_Images/GTSRB/Final_Training/Images')
-
 # Load test data and model
-test_dir = os.path.join(os.getcwd(), 'GTSRB_Final_Test_Images/GTSRB/Final_Test/Images')
+test_dir = os.path.join(os.getcwd(), 'GTSRB/Final_Test/Images')
 state_dict = torch.load(model_file)
 model = GTSRBnet(n_classes=43)
 model.load_state_dict(state_dict)
@@ -74,7 +72,7 @@ for f in tqdm(sorted(glob(os.path.join(test_dir, "*.ppm"))), disable=(not args.v
 output_file.close()
 
 # Calculate test accuracy
-gt_file = os.path.join(os.getcwd(), 'GTSRB_Final_Test_GT/GT-final_test.csv')
+gt_file = os.path.join(os.getcwd(), 'GTSRB/GT-final_test.csv')
 gt = pd.read_csv(gt_file, sep=';')
 pred_file = os.path.join(output_path, 'pred.csv')
 pred = pd.read_csv(pred_file, sep=',')

@@ -48,7 +48,7 @@ if not os.path.exists(trained_models_path):
     os.makedirs(trained_models_path)
 
 # Define path of training data
-train_data_path = os.path.join(os.getcwd(), 'GTSRB_Final_Training_Images/GTSRB/Final_Training/Images')
+train_data_path = os.path.join(os.getcwd(), 'GTSRB/Final_Training/Images')
 train_data = torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.transform)
 
 # Divide data into training and validation set
