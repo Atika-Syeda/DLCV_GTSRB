@@ -40,6 +40,14 @@ if not os.path.exists(output_path):
 
 model_path = os.path.join(os.getcwd(), args.output_dir, 'trained_models')
 model_file = os.path.join(model_path, args.model_file)
+# Check if model_file does not exist then use last epoch model
+if not os.path.exists(model_file):
+    models = glob(os.path.join(os.getcwd(), args.output_dir, 'trained_models', '*.pth'))
+    models = [i.split("_")[-1].split(".")[0] for i in models]
+    models = [int(i) for i in models]
+    model_file = os.path.join(model_path, f'model_{max(models)}.pth')
+if args.verbose:
+    print(f"Using model: {model_file}")
 
 train_data_path = os.path.join(os.getcwd(), 'GTSRB_Final_Training_Images/GTSRB/Final_Training/Images')
 

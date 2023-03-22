@@ -1,0 +1,16 @@
+name: GTSRB
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8.13
+  - pip
+  - pip:
+    - numpy>=1.16
+    - scipy
+    - scikit-learn
+    - matplotlib
+    - tqdm
+    - torch>=1.9
+    - torchvision
+    - pandas
+    - seaborn

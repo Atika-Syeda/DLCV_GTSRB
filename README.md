@@ -1,11 +1,9 @@
 # DLCV_GTSRB
 German Traffic Sign Recognition Benchmark Project as part of Deep Learning for Computer Vision class
 
-
 ## Project Structure
 
 ```
-.
 ├── README.md
 ├── main.py
 ├── model.py
@@ -30,11 +28,11 @@ hed-archive.html) and extract the files in the same directory as the code.
 
 To train the model, run the following command:
 ```
-python main.py
+python3 main.py
 ```
 To modify any default parameters, use the following command:
 ```
-python main.py --batch_size <batch_size> --epochs <epochs> --lr <learning_rate> --seed <seed> --verbose <bool> --output-dir <output_dir> 
+python3 main.py --batch_size <batch_size> --epochs <epochs> --lr <learning_rate> --seed <seed> --verbose <bool> --output-dir <output_dir> 
 ```
 
 ### Evaluation
@@ -42,12 +40,12 @@ python main.py --batch_size <batch_size> --epochs <epochs> --lr <learning_rate> 
 To evaluate the model, run the following command:
 
 ```
-python evaluate.py
+python3 evaluate.py
 ```
 
 The file by default uses the last saved epoch for evaluation. To modify any default parameters including the model file saved in output/trained_models, use the following command:
 ```
-python evaluate.py --seed <seed> --verbose <bool> --output-dir <output_dir> --model-file <model_file>
+python3 evaluate.py --seed <seed> --verbose <bool> --output-dir <output_dir> --model-file <model_file>
 ```
 
 ## References
