@@ -17,16 +17,14 @@ import utils
 parser = argparse.ArgumentParser(description='PyTorch GTSRB')
 parser.add_argument('--batch-size', type=int, default=100, metavar='N',
                     help='input batch size for training (default: 100)')
-parser.add_argument('--epochs', type=int, default=100, metavar='N',
-                    help='number of epochs to train (default: 100)')
+parser.add_argument('--epochs', type=int, default=50, metavar='N',
+                    help='number of epochs to train (default: 50)')
 parser.add_argument('--lr', type=float, default=0.001, metavar='LR',
                     help='learning rate (default: 0.001)')
 parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--verbose', type=bool, default=True, metavar='V',
                     help='verbose (default: True)')   
-parser.add_argument('--save-model', type=bool, default=True, metavar='V',
-                    help='For Saving the current Model') 
 parser.add_argument(('--output-dir'), type=str, default='output', metavar='OP',
                     help='Output directory (default: output)')
 args = parser.parse_args()
