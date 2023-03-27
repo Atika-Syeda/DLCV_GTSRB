@@ -13,6 +13,7 @@ from glob import glob
 from model import GTSRBnet
 import utils
 
+
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch GTSRB')
 parser.add_argument('--seed', type=int, default=1, metavar='S',
