@@ -29,6 +29,7 @@ jupyter/__pycache__/
 __pycache__/
 dist/
 output/
+output_part2/
 GTSRB_Final_Test_GT/
 .eggs/
 .vscode/

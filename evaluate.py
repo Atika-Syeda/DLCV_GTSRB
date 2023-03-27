@@ -22,8 +22,8 @@ parser.add_argument('--verbose', type=bool, default=True, metavar='V',
                     help='verbose (default: True)')   
 parser.add_argument(('--output-dir'), type=str, default='output', metavar='OP',
                     help='Output directory (default: output)')
-parser.add_argument('--model-file', type=str, default='model.pth', metavar='MF',
-                    help='Model file (default: model.pth)')
+parser.add_argument('--model-folder', type=str, default='trained_models', metavar='MF',
+                    help='Models path (default: trained_models)')
 args = parser.parse_args()
 
 torch.manual_seed(args.seed)
@@ -39,14 +39,14 @@ output_path = os.path.join(os.getcwd(), args.output_dir)
 if not os.path.exists(output_path):
     os.makedirs(output_path)
 
-model_path = os.path.join(os.getcwd(), args.output_dir, 'trained_models')
-model_file = os.path.join(model_path, args.model_file)
-# Check if model_file does not exist then use last epoch model
-if not os.path.exists(model_file):
-    models = glob(os.path.join(os.getcwd(), args.output_dir, 'trained_models', '*.pth'))
-    models = [i.split("_")[-1].split(".")[0] for i in models]
-    models = [int(i) for i in models]
-    model_file = os.path.join(model_path, f'model_{max(models)}.pth')
+model_path = os.path.join(os.getcwd(), args.output_dir, args.model_folder)
+if not os.path.exists(model_path):
+    raise Exception("Model path does not exist")
+# Use last epoch model
+models = glob(os.path.join(model_path, '*.pth'))
+models = [i.split("_")[-1].split(".")[0] for i in models]
+models = [int(i) for i in models]
+model_file = os.path.join(model_path, f'model_{max(models)}.pth')
 if args.verbose:
     print(f"Using model: {model_file}")
 
@@ -58,7 +58,7 @@ model.load_state_dict(state_dict)
 model.eval();
 
 # Predict test data and write to file
-output_file = open(os.path.join(output_path, 'pred.csv'), "w")
+output_file = open(os.path.join(output_path, args.model_folder+'_pred.csv'), "w")
 output_file.write("Filename,ClassId\n")
 for f in tqdm(sorted(glob(os.path.join(test_dir, "*.ppm"))), disable=(not args.verbose)):
     output = torch.zeros([1, 43], dtype=torch.float32)
@@ -75,7 +75,7 @@ output_file.close()
 # Calculate test accuracy
 gt_file = os.path.join(os.getcwd(), 'GTSRB/GT-final_test.csv')
 gt = pd.read_csv(gt_file, sep=';')
-pred_file = os.path.join(output_path, 'pred.csv')
+pred_file = os.path.join(output_path, args.model_folder+'_pred.csv')
 pred = pd.read_csv(pred_file, sep=',')
 
 if args.verbose:
@@ -93,6 +93,6 @@ plt.xlabel('Predicted label', fontsize=20)
 cbar = plt.gcf().axes[-1]
 cbar.tick_params(labelsize=20)
 # Save confusion matrix
-plt.savefig(os.path.join(output_path, 'confusion_matrix.png'), bbox_inches='tight', pad_inches=0.1)
+plt.savefig(os.path.join(output_path, args.model_folder+'_confusion_matrix.png'), bbox_inches='tight', pad_inches=0.1)
 if args.verbose:
-    print("Confusion matrix saved to ", os.path.join(output_path, "confusion_matrix.png"))
+    print("Confusion matrix saved to ", os.path.join(output_path, args.model_folder+"_confusion_matrix.png"))
