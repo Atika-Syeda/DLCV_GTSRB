@@ -80,7 +80,10 @@ pred = pd.read_csv(pred_file, sep=',')
 
 if args.verbose:
     print("Accuracy: ", (gt['ClassId']==pred['ClassId']).sum()/len(gt)*100, " %")
-
+# Write accuracy to file
+with open(os.path.join(output_path, args.model_folder+'_accuracy.txt'), 'w') as f:
+    f.write(str((gt['ClassId']==pred['ClassId']).sum()/len(gt)*100))
+    
 # Plot a confusion matrix
 cm = confusion_matrix(gt['ClassId'], pred['ClassId'])
 cm = (cm.astype('float') / cm.sum(axis=1)[:, np.newaxis])*100

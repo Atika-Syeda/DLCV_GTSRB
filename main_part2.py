@@ -12,6 +12,10 @@ from torch.autograd import Variable
 from model import GTSRBnet
 import utils 
 
+# TODO: Add reference: https://www.maskaravivek.com/post/pytorch-weighted-random-sampler/
+# TODO: Add reference: https://arxiv.org/pdf/1710.05381.pdf
+# TODO: Decide how to select a factor for the weighted sampler
+
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch GTSRB')
 parser.add_argument('--batch-size', type=int, default=100, metavar='N',
@@ -80,18 +84,32 @@ class_sample_count = np.array(
     [len(np.where(y_train == t)[0]) for t in np.unique(y_train)])
 # Find weights for each class
 weight = 1. / class_sample_count
+
+# Create a weighted sampler
 if args.sampler == 'weighted':
     samples_weight = np.array([weight[t] for t in y_train])
     samples_weight = torch.from_numpy(samples_weight)
-elif args.sampler == 'oversample': # Oversample the minority classes by a factor of 10
+elif args.sampler == 'oversample': 
+    # Oversample the minority classes by a factor of 10. This increases the number of cases in the minority classes so that the number matches the majority classes.
     minority_classes = np.where(class_sample_count < 1000)[0]
     samples_weight = np.array([weight[t] for t in y_train])
     for i in minority_classes:
         samples_weight[y_train == i] *= 10
     samples_weight = torch.from_numpy(samples_weight)
-elif args.sampler == 'undersample': # Undersample the majority classes by a factor of 10
+elif args.sampler == 'undersample': 
+    # Undersample the majority classes by a factor of 10. Undersampling decreases the number of cases in the majority classes to match the minority classes. 
     majority_classes = np.where(class_sample_count > 1000)[0]
     samples_weight = np.array([weight[t] for t in y_train])
+    for i in majority_classes:
+        samples_weight[y_train == i] /= 10
+    samples_weight = torch.from_numpy(samples_weight)
+elif args.sampler == 'both':
+    # Oversample the minority classes by a factor of 10 and undersample the majority classes by a factor of 10. 
+    minority_classes = np.where(class_sample_count < 1000)[0]
+    majority_classes = np.where(class_sample_count > 1000)[0]
+    samples_weight = np.array([weight[t] for t in y_train])
+    for i in minority_classes:
+        samples_weight[y_train == i] *= 10
     for i in majority_classes:
         samples_weight[y_train == i] /= 10
     samples_weight = torch.from_numpy(samples_weight)
