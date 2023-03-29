@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from torch.utils import data
 from torch.autograd import Variable
 from torchvision.io import read_image
-from model import GTSRBnet
+from model import GTSRNet
 import utils 
 
 # Training settings
@@ -90,7 +90,7 @@ train_loader = data.DataLoader(train_data, shuffle=True, batch_size=args.batch_s
 val_loader = data.DataLoader(val_data, shuffle=True, batch_size=args.batch_size)
 
 # Initialize the model and optimizer
-model = GTSRBnet(num_train_classes)
+model = GTSRNet(num_train_classes)
 model = model.to(device);
 
 # Define loss function and optimizer

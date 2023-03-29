@@ -9,7 +9,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 from torch.utils import data
 from torch.autograd import Variable
-from model import GTSRBnet
+from model import GTSRNet
 import utils 
 
 # TODO: Add reference: https://www.maskaravivek.com/post/pytorch-weighted-random-sampler/
@@ -86,35 +86,41 @@ class_sample_count = np.array(
 weight = 1. / class_sample_count
 
 # Create a weighted sampler
+minority_classes = np.where(class_sample_count < 1000)[0]
+majority_classes = np.where(class_sample_count > 1000)[0]
+frac_minority = len(minority_classes)/len(class_sample_count)
+frac_majority = len(majority_classes)/len(class_sample_count)
+imbalance_ratio = frac_minority/frac_majority
+print("Imbalance ratio = ", imbalance_ratio)
+print("Fraction of minority classes = ", frac_minority)
+print("Fraction of majority classes = ", frac_majority)
 if args.sampler == 'weighted':
     samples_weight = np.array([weight[t] for t in y_train])
     samples_weight = torch.from_numpy(samples_weight)
 elif args.sampler == 'oversample': 
     # Oversample the minority classes by a factor of 10. This increases the number of cases in the minority classes so that the number matches the majority classes.
+    # The higher a fraction of minority classes in the imbalanced training set, the more imbalance ratio should be reduced
     minority_classes = np.where(class_sample_count < 1000)[0]
     samples_weight = np.array([weight[t] for t in y_train])
     for i in minority_classes:
-        samples_weight[y_train == i] *= 10
+        samples_weight[y_train == i] *= imbalance_ratio
     samples_weight = torch.from_numpy(samples_weight)
 elif args.sampler == 'undersample': 
     # Undersample the majority classes by a factor of 10. Undersampling decreases the number of cases in the majority classes to match the minority classes. 
-    majority_classes = np.where(class_sample_count > 1000)[0]
     samples_weight = np.array([weight[t] for t in y_train])
     for i in majority_classes:
-        samples_weight[y_train == i] /= 10
+        samples_weight[y_train == i] /= imbalance_ratio
     samples_weight = torch.from_numpy(samples_weight)
 elif args.sampler == 'both':
     # Oversample the minority classes by a factor of 10 and undersample the majority classes by a factor of 10. 
-    minority_classes = np.where(class_sample_count < 1000)[0]
-    majority_classes = np.where(class_sample_count > 1000)[0]
     samples_weight = np.array([weight[t] for t in y_train])
     for i in minority_classes:
-        samples_weight[y_train == i] *= 10
+        samples_weight[y_train == i] *= imbalance_ratio
     for i in majority_classes:
-        samples_weight[y_train == i] /= 10
+        samples_weight[y_train == i] /= imbalance_ratio
     samples_weight = torch.from_numpy(samples_weight)
 else:
-    samples_weight = np.array([1 for t in y_train])
+    samples_weight = np.array([1 for _ in y_train])
     samples_weight = torch.from_numpy(samples_weight)
 
 # Plot the histogram of the training data classes 
@@ -126,7 +132,6 @@ plt.ylabel("Number of samples")
 # Save the plot
 plt.savefig(os.path.join(output_path, args.sampler+'_sample_weights.png'))
 
-
 # Create data loader for training and validation
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 sampler = torch.utils.data.WeightedRandomSampler(samples_weight.type('torch.DoubleTensor'), len(samples_weight))
@@ -134,7 +139,7 @@ train_loader = data.DataLoader(train_data, batch_size=args.batch_size, sampler=s
 val_loader = data.DataLoader(val_data, shuffle=True, batch_size=args.batch_size)
 
 # Initialize the model and optimizer
-model = GTSRBnet(num_train_classes)
+model = GTSRNet(num_train_classes)
 model = model.to(device);
 
 # Define loss function and optimizer
@@ -220,4 +225,5 @@ ax[1].spines['top'].set_visible(False)
 fig.savefig(os.path.join(output_path, args.sampler+'_loss_acc.png'))
 if args.verbose:
     print("Loss and accuracy plots saved to {}".format(os.path.join(output_path, args.sampler+'_loss_acc.png')))
+
 

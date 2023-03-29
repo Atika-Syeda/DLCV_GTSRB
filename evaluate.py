@@ -10,7 +10,7 @@ from sklearn.metrics import confusion_matrix
 import numpy as np
 from torchvision import transforms
 from glob import glob
-from model import GTSRBnet
+from model import GTSRNet
 import utils
 
 
@@ -53,7 +53,7 @@ if args.verbose:
 # Load test data and model
 test_dir = os.path.join(os.getcwd(), 'GTSRB/Final_Test/Images')
 state_dict = torch.load(model_file)
-model = GTSRBnet(n_classes=43)
+model = GTSRNet(n_classes=43)
 model.load_state_dict(state_dict)
 model.eval();
 
@@ -83,7 +83,7 @@ if args.verbose:
 # Write accuracy to file
 with open(os.path.join(output_path, args.model_folder+'_accuracy.txt'), 'w') as f:
     f.write(str((gt['ClassId']==pred['ClassId']).sum()/len(gt)*100))
-    
+
 # Plot a confusion matrix
 cm = confusion_matrix(gt['ClassId'], pred['ClassId'])
 cm = (cm.astype('float') / cm.sum(axis=1)[:, np.newaxis])*100
