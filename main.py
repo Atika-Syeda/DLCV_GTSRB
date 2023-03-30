@@ -199,3 +199,8 @@ ax[1].spines['top'].set_visible(False)
 fig.savefig(os.path.join(output_path, 'loss_acc.png'))
 if args.verbose:
     print("Loss and accuracy plots saved to {}".format(os.path.join(output_path, 'loss_acc.png')))
+
+# References:
+#  Some of the following code is adapted from:
+# - https://github.com/poojahira/gtsrb-pytorch
+# - https://github.com/surajmurthy/TSR_PyTorch

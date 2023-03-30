@@ -85,4 +85,4 @@ python3 evaluate.py --seed <seed> --verbose <bool> --output-dir <output_dir> --m
 This will load the model weigths from the last saved epoch to perform inference on test data. A *pred.csv* file will be saved containing the predictions for test data. A *.txt file will also be saved containing the classification accuracy. Other relevant figures will also be saved in the same output folder.
 
 ## References
-Please see acknowledgements and refernce section in the attached report for details.
+Please see acknowledgements and reference section in the attached report for details.

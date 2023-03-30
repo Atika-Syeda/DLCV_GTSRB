@@ -30,9 +30,7 @@ parser.add_argument('--verbose', type=bool, default=True, metavar='V',
 parser.add_argument('--output-dir', type=str, default='output_part2', metavar='OP',
                     help='Output directory (default: output_part2)')
 parser.add_argument('--sampler', type=str, default='none', metavar='S',
-                    help='Sampler (default: none)')
-parser.add_argument('--data-augmentation', type=bool, default=False, metavar='DA',
-                    help='Data augmentation (default: False)')
+                    help='Sampler (default: none). Other options: oversample, undersample, both and weighted.')
 args = parser.parse_args()
 
 torch.manual_seed(args.seed)
@@ -51,15 +49,7 @@ trained_models_path = os.path.join(output_path, args.sampler+'_trained_models')
 
 # Define path of training data
 train_data_path = os.path.join(os.getcwd(), 'GTSRB/Final_Training/Images')
-if args.data_augmentation:
-    if args.verbose:
-        print("Using data augmentation")
-    output_path = os.path.join(output_path, '_DA')
-    dataset = torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.data_aug_transform)
-else:
-    if args.verbose:
-        print("Not using data augmentation")
-    dataset = torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.transform)
+dataset = torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.transform)
 
 # Create directories if they do not exist
 if not os.path.exists(output_path):
