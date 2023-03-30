@@ -69,6 +69,16 @@ python3 main.py --batch_size <batch_size> --epochs <epochs> --lr <learning_rate>
 ```
 Use --help to get mpre details for the different tags. The default command `python3 main.py` will save the output of the model/script in a folder called output by default. 
 
+To run code for part 2 use the following:
+```
+python3 main_part2.py --sampler <oversample/undersample/both>
+```
+
+To run baseline model with data augmentation:
+```
+python3 main.py --data-augmentation  True
+```
+
 ### Evaluation
 
 To evaluate the trained model, run the following command:
@@ -80,6 +90,11 @@ python3 evaluate.py
 The file by default uses the last saved epoch for evaluation. To modify any default parameters including the model file saved in output/trained_models, use the following command:
 ```
 python3 evaluate.py --seed <seed> --verbose <bool> --output-dir <output_dir> --model-folder <model_folder>
+```
+
+To evaluate model from part 2:
+```
+python3 evaluate.py --output-dir output_part2 --model-folder <oversample_trained_models/undersample_trained_models/both_trained_models>
 ```
 
 This will load the model weigths from the last saved epoch to perform inference on test data. A *pred.csv* file will be saved containing the predictions for test data. A *.txt file will also be saved containing the classification accuracy. Other relevant figures will also be saved in the same output folder.

@@ -35,6 +35,7 @@ GTSRB_Final_Test_GT/
 .eggs/
 .vscode/
 *.pth
+*.pdf
 *.pt
 *.sh
 *.pkl
