@@ -13,3 +13,31 @@ transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
+data_rotate_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.Resize([128, 128]),
+    transforms.RandomRotation(10),
+    transforms.ToTensor()
+])
+
+data_hflip_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.Resize([128, 128]),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor()
+])
+
+data_vflip_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.Resize([128, 128]),
+    transforms.RandomVerticalFlip(),
+    transforms.ToTensor()
+])
+
+data_jitter_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.Resize([128, 128]),
+    transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2),
+    transforms.ToTensor()
+])
+

@@ -14,7 +14,6 @@ import utils
 
 # TODO: Add reference: https://www.maskaravivek.com/post/pytorch-weighted-random-sampler/
 # TODO: Add reference: https://arxiv.org/pdf/1710.05381.pdf
-# TODO: Decide how to select a factor for the weighted sampler
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch GTSRB')
@@ -30,8 +29,10 @@ parser.add_argument('--verbose', type=bool, default=True, metavar='V',
                     help='verbose (default: True)')   
 parser.add_argument('--output-dir', type=str, default='output_part2', metavar='OP',
                     help='Output directory (default: output_part2)')
-parser.add_argument('--sampler', type=str, default='weighted', metavar='S',
-                    help='Sampler (default: weighted)')
+parser.add_argument('--sampler', type=str, default='none', metavar='S',
+                    help='Sampler (default: none)')
+parser.add_argument('--data-augmentation', type=bool, default=False, metavar='DA',
+                    help='Data augmentation (default: False)')
 args = parser.parse_args()
 
 torch.manual_seed(args.seed)
@@ -45,16 +46,26 @@ else:
 
 # Create output directory if it does not exist
 output_path = os.path.join(os.getcwd(), args.output_dir)
-if not os.path.exists(output_path):
-    os.makedirs(output_path)
 # Create trained models directory if it does not exist
 trained_models_path = os.path.join(output_path, args.sampler+'_trained_models')
-if not os.path.exists(trained_models_path):
-    os.makedirs(trained_models_path)
 
 # Define path of training data
 train_data_path = os.path.join(os.getcwd(), 'GTSRB/Final_Training/Images')
-dataset = torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.transform)
+if args.data_augmentation:
+    if args.verbose:
+        print("Using data augmentation")
+    output_path = os.path.join(output_path, '_DA')
+    dataset = torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.data_aug_transform)
+else:
+    if args.verbose:
+        print("Not using data augmentation")
+    dataset = torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.transform)
+
+# Create directories if they do not exist
+if not os.path.exists(output_path):
+    os.makedirs(output_path)
+if not os.path.exists(trained_models_path):
+    os.makedirs(trained_models_path)
 
 # Divide data into training and validation set
 train_ratio = 0.9

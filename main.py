@@ -27,6 +27,8 @@ parser.add_argument('--verbose', type=bool, default=True, metavar='V',
                     help='verbose (default: True)')   
 parser.add_argument(('--output-dir'), type=str, default='output', metavar='OP',
                     help='Output directory (default: output)')
+parser.add_argument('--data-augmentation', type=bool, default=False, metavar='DA',
+                    help='Data augmentation (default: False)')
 args = parser.parse_args()
 
 torch.manual_seed(args.seed)
@@ -40,16 +42,32 @@ else:
 
 # Create output directory if it does not exist
 output_path = os.path.join(os.getcwd(), args.output_dir)
+
+# Define path of training data
+train_data_path = os.path.join(os.getcwd(), 'GTSRB/Final_Training/Images')
+if args.data_augmentation:
+    if args.verbose:
+        print("Using data augmentation")
+    output_path = output_path+'_DA'
+    train_data = torch.utils.data.ConcatDataset(
+         [torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.transform),
+          torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.data_hflip_transform),
+          torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.data_vflip_transform),
+          torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.data_rotate_transform),
+          torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.data_jitter_transform)
+          ])
+else:
+    if args.verbose:
+        print("Not using data augmentation")
+    train_data = torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.transform)
+
+# Create directories if they do not exist
 if not os.path.exists(output_path):
     os.makedirs(output_path)
 # Create trained models directory if it does not exist
 trained_models_path = os.path.join(output_path, 'trained_models')
 if not os.path.exists(trained_models_path):
     os.makedirs(trained_models_path)
-
-# Define path of training data
-train_data_path = os.path.join(os.getcwd(), 'GTSRB/Final_Training/Images')
-train_data = torchvision.datasets.ImageFolder(root = train_data_path, transform=utils.transform)
 
 # Divide data into training and validation set
 train_ratio = 0.9
@@ -60,6 +78,7 @@ if args.verbose:
     print(f"Number of training samples = {len(train_data)}")
     print(f"Number of validation samples = {len(val_data)}")
 
+"""
 # Get the number of classes and the class names
 num_train_classes = len(train_data.dataset.classes)
 train_hist = [0]*num_train_classes
@@ -83,6 +102,7 @@ plt.xlabel("Class ID")
 plt.ylabel("# of examples")
 # Save the plot
 plt.savefig(os.path.join(output_path, 'distribution.png'))
+"""
 
 # Create data loader for training and validation
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -90,7 +110,7 @@ train_loader = data.DataLoader(train_data, shuffle=True, batch_size=args.batch_s
 val_loader = data.DataLoader(val_data, shuffle=True, batch_size=args.batch_size)
 
 # Initialize the model and optimizer
-model = GTSRNet(num_train_classes)
+model = GTSRNet(43) #num_train_classes)
 model = model.to(device);
 
 # Define loss function and optimizer
