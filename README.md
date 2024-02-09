@@ -4,6 +4,9 @@ German Traffic Sign Recognition Benchmark Project as part of Deep Learning for C
 ## Summary 
 A deep neural network (DNN) architecture was implemented for a traffic sign classification task using the German Traffic Sign Recognition (GTSRB) dataset. Using a network that implemented features of  a U-Net architecture, the best performing model achieved an impressive accuracy of 98.16% on the test dataset. A class confusion matrix was used to evaluate the model and show the relative distribution of classifications for each class. The project also explored the effects of class imbalance and limited data. Using oversampling and undersampling methods, experiments were designed and run to examine how test accuracy changes when class imbalance and limited data exist. The effect was studied by comparing overall test accuracy and comparing class confusion matrices. The results demonstrated that oversampling and undersampling methods can mitigate class imbalance and improve model performance.
 
+## Project report
+More details of the project can be found in this [report](https://github.com/Atika-Syeda/DLCV_GTSRB/blob/main/DLCV_midterm_project.pdf).
+
 ## Project setup
 
 Use the following to clone the package:
